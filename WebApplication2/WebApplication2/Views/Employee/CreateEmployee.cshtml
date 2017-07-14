@@ -1,71 +1,77 @@
-﻿@{
+﻿@using WebApplication2.ViewModels
+@model CreateEmployeeViewModel
+
+@{
     Layout = null;
 }
 <!DOCTYPE html>
 <html>
 <head>
+    <script src="~/Scripts/Validations.js"></script>
     <meta name="viewport" content="width=device-width" />
     <title>CreateEmployee</title>
     <script>
         function ResetForm() {
-            document.getElementById("TxtFName").value = "";
-            document.getElementById("TxtLName").value = "";
-            document.getElementById("TxtSalary").value = "";
+            document.getElementById('TxtFName').value = "@Model.FirstName";
+            document.getElementById('TxtLName').value = "@Model.LastName";
+            document.getElementById('TxtSalary').value = "@Model.Salary";
         }
     </script>
 </head>
 <body>
-    <table>
-        <tr>
-            <td>
-                First Name:
-            </td>
-            <td>
-                <input type="text" id="TxtFName" name="FirstName" value="" />
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" align="right">
-                @Html.ValidationMessage("FirstName")
-            </td>
-        </tr>
-        <tr>
-            <td>
-                Last Name:
-            </td>
-            <td>
-                <input type="text" id="TxtLName" name="LastName" value="" />
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" align="right">
-                @Html.ValidationMessage("LastName")
-            </td>
-        </tr>
+    <div>
+        <form action="/Employee/SaveEmployee" method="post">
+            <table>
+                <tr>
+                    <td>
+                        First Name:
+                    </td>
+                    <td>                        
+                        <input type="text" id="TxtFName" name="FirstName" value="" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="right">
+                        @Html.ValidationMessage("FirstName")
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Last Name:
+                    </td>
+                    <td>
+                        <input type="text" id="TxtLName" name="LastName" value="" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="right">
+                        @Html.ValidationMessage("LastName")
+                    </td>
+                </tr>
 
-        <tr>
-            <td>
-                Salary:
-            </td>
-            <td>
-                <input type="text" id="TxtSalary" name="Salary" value="" />
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" align="right">
-                @Html.ValidationMessage("Salary")
-            </td>
-        </tr>
+                <tr>
+                    <td>
+                        Salary:
+                    </td>
+                    <td>
+                        <input type="text" id="TxtSalary" name="Salary" value="" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="right">
+                        @Html.ValidationMessage("Salary")
+                    </td>
+                </tr>
 
-        <tr>
-            <td colspan="2">
-                <input type="submit" name="BtnSubmit" value="Save Employee" />
-
-                <input type="button" name="BtnReset" value="Reset" onclick="ResetForm();" />
-
-                <input type="submit" name="BtnSubmit" value="Cancel" />
-            </td>
-        </tr>
-    </table>
+                <tr>
+                    <td colspan="2">
+                        <input type="submit" name="BtnSubmit" value="Save Employee" onclick="IsValid();" />
+                        <input type="submit" name="BtnSubmit" value="Cancel" />
+                        <input type="button" name="BtnReset" value="Reset" onclick="ResetForm();" />
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
 </body>
 </html>

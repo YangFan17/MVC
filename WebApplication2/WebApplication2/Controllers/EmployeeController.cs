@@ -10,13 +10,17 @@ using WebApplication2.ViewModels;
 
 namespace WebApplication2.Controllers
 {
+    
     public class EmployeeController : Controller
     {
         // GET: Test
-
+        [Authorize]
         public ActionResult Index()
         {
             ViewModels.EmployeeListViewModel employeeListViewModel = new ViewModels.EmployeeListViewModel();
+            employeeListViewModel.UserName = User.Identity.Name;
+
+            employeeListViewModel.FooterData = new FooterViewModel();
 
             EmployeeBusinessLayer empBal = new EmployeeBusinessLayer();
             List<Employee> employees = empBal.GetEmployees();
@@ -28,7 +32,7 @@ namespace WebApplication2.Controllers
                 EmployeeViewModel empViewModel = new EmployeeViewModel();
                 empViewModel.EmployeeName = emp.FirstName + " " + emp.LastName;
                 empViewModel.Salary = emp.Salary.ToString("C");
-                if (emp.Salary > 15000)
+                if (emp.Salary > 5000)
                 {
                     empViewModel.SalaryColor = "yellow";
                 }
@@ -40,37 +44,47 @@ namespace WebApplication2.Controllers
             }
             employeeListViewModel.Employees = empViewModels;
             employeeListViewModel.UserName = "Admin";
+
+            employeeListViewModel.FooterData = new FooterViewModel();
+            employeeListViewModel.FooterData.CompanyName = "云凯科技";
+            employeeListViewModel.FooterData.Year = DateTime.Now.Year.ToString();
             return View("Index", employeeListViewModel);
         }
-
         public ActionResult AddNew()
         {
-            return View("CreateEmployee");
+            return View("CreateEmployee", new CreateEmployeeViewModel());
         }
-
 
         public ActionResult SaveEmployee(Employee e, string BtnSubmit)
         {
             switch (BtnSubmit)
             {
                 case "Save Employee":
+                    if (ModelState.IsValid)
                     {
-                        if (ModelState.IsValid)
+                        EmployeeBusinessLayer empBal = new EmployeeBusinessLayer();
+                        empBal.SaveEmployee(e);
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        CreateEmployeeViewModel vm = new CreateEmployeeViewModel();
+                        vm.FirstName = e.FirstName;
+                        vm.LastName = e.LastName;
+                        if (e.Salary!=0)
                         {
-                            EmployeeBusinessLayer bal = new EmployeeBusinessLayer();
-                            bal.SaveEmployee(e);
-                            return RedirectToAction("Index");
+                            vm.Salary = e.Salary.ToString();
                         }
                         else
                         {
-                            return View("CreateEmployee");
+                            vm.Salary = ModelState["Salary"].Value.AttemptedValue;
                         }
-                    };
+                        return View("CreateEmployee", vm); // Day 4 Change - Passing e here
+                    }
                 case "Cancel":
                     return RedirectToAction("Index");
             }
             return new EmptyResult();
-
         }
     }
 }

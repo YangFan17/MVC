@@ -5,11 +5,10 @@ using System.Web;
 
 namespace WebApplication2.ViewModels
 {
-    public class EmployeeViewModel
+    public class CreateEmployeeViewModel
     {
-        public string EmployeeName { get; set; }
+        public string FirstName { get; set; }   
+        public string LastName { get; set; }    
         public string Salary { get; set; }
-        public string SalaryColor { get; set; }
-
     }
 }
