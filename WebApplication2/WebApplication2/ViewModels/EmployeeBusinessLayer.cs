@@ -20,17 +20,36 @@ namespace WebApplication2.Models
             salesDal.SaveChanges();
             return e;
         }
-        public bool IsValidUser(UserDetails u)
+        public UserStatus GetUserValidity(UserDetails u)
+
         {
+
             if (u.UserName == "Admin" && u.Password == "123")
+
             {
-                return true;
+
+                return UserStatus.AuthenticatedAdmin;
+
             }
+
+            else if (u.UserName == "User" && u.Password == "123")
+
+            {
+
+                return UserStatus.AuthentucatedUser;
+
+            }
+
             else
+
             {
-                return false;
+
+                return UserStatus.NonAuthenticatedUser;
+
             }
+
         }
+
     }
 }
 

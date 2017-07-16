@@ -6,10 +6,8 @@ using WebApplication2.ViewModels;
 
 namespace WebApplication2.EmployeeViewModels
 {
-    public class EmployeeListViewModel
+    public class EmployeeListViewModel : BaseViewModel
     {
-        public List<EmployeeViewModel> Employees { get; set; }  
-        public string UserName { get; set; }
-        public FooterViewModel FooterData { get; set; }
+        public List<EmployeeViewModel> Employees { get; set; }
     }
 }

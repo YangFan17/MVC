@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using WebApplication2.EmployeeViewModels;
+using WebApplication2.Filters;
 using WebApplication2.Models;
 using WebApplication2.ViewModels;
 
@@ -50,11 +51,26 @@ namespace WebApplication2.Controllers
             employeeListViewModel.FooterData.Year = DateTime.Now.Year.ToString();
             return View("Index", employeeListViewModel);
         }
+        [AdminFilter]
         public ActionResult AddNew()
+
         {
-            return View("CreateEmployee", new CreateEmployeeViewModel());
+
+            CreateEmployeeViewModel employeeListViewModel = new CreateEmployeeViewModel();
+
+            employeeListViewModel.FooterData = new FooterViewModel();
+
+            employeeListViewModel.FooterData.CompanyName = "云凯科技";//Can be set to dynamic value
+
+            employeeListViewModel.FooterData.Year = DateTime.Now.Year.ToString();
+
+            employeeListViewModel.UserName = User.Identity.Name; //New Line
+
+            return View("CreateEmployee", employeeListViewModel);
+
         }
 
+        [AdminFilter]
         public ActionResult SaveEmployee(Employee e, string BtnSubmit)
         {
             switch (BtnSubmit)
@@ -71,6 +87,15 @@ namespace WebApplication2.Controllers
                         CreateEmployeeViewModel vm = new CreateEmployeeViewModel();
                         vm.FirstName = e.FirstName;
                         vm.LastName = e.LastName;
+                        vm.FooterData = new FooterViewModel();
+
+                        vm.FooterData.CompanyName = "云凯科技";//Can be set to dynamic value
+
+                        vm.FooterData.Year = DateTime.Now.Year.ToString();
+
+                        vm.UserName = User.Identity.Name; //New Line
+
+                        return View("CreateEmployee", vm); // Day 4 Change - Passing e here
                         if (e.Salary!=0)
                         {
                             vm.Salary = e.Salary.ToString();
@@ -85,6 +110,17 @@ namespace WebApplication2.Controllers
                     return RedirectToAction("Index");
             }
             return new EmptyResult();
+        }
+        public ActionResult GetAddNewLink()
+        {
+            if (Convert.ToBoolean(Session["IsAdmin"]))
+            {
+                return PartialView("AddNewLink");
+            }
+            else
+            {
+                return new EmptyResult();
+            }
         }
     }
 }
